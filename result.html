@@ -178,9 +178,9 @@ fetch('./data.json')
     document.getElementById('m-hum').innerHTML  = d.humidity    + '<span style="font-size:12px;color:#aaa">%</span>';
     document.getElementById('m-set').innerHTML  = d.set_temperature + '<span style="font-size:12px;color:#aaa">°C</span>';
 
-    const tempOk = d.temperature    >= 22 && d.temperature    <= 28;
-    const humOk  = d.humidity       >= 40 && d.humidity       <= 65;
-    const setOk  = d.set_temperature >= 22 && d.set_temperature <= 28;
+    const tempOk = d.temperature    >= 24 && d.temperature    <= 27;
+    const humOk  = d.humidity       >= 45 && d.humidity       <= 60;
+    const setOk  = d.set_temperature >= 24 && d.set_temperature <= 28;
     const b = (ok, okTxt, ngTxt) => `<span class="${ok?'badge-ok':'badge-warn'}">${ok?okTxt:ngTxt}</span>`;
     document.getElementById('b-temp').outerHTML = b(tempOk, '快適域内', '範囲外');
     document.getElementById('b-hum').outerHTML  = b(humOk,  '快適域内', '範囲外');
