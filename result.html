@@ -160,12 +160,13 @@ function renderDist(votes) {
     </div>`;
   }).join('');
 
-  const coldPct = Math.round((votes[1]+votes[2])/total*100);
+ const coldPct = Math.round((votes[1]+votes[2])/total*100);
   const hotPct  = Math.round((votes[5]+votes[4])/total*100);
   const okPct   = Math.round(votes[3]/total*100);
   let msg = `回答者の <strong>${okPct}%</strong> がちょうどよいと感じています。`;
   if (coldPct >= 20) msg += `　<strong>${coldPct}%</strong> がやや寒い〜とても寒いと回答。`;
   if (hotPct  >= 20) msg += `　<strong>${hotPct}%</strong> がやや暑い〜とても暑いと回答。`;
+  document.getElementById('highlight').innerHTML = msg;
 }
 
 const votes = JSON.parse(localStorage.getItem('votes') || '{"5":8,"4":19,"3":58,"2":31,"1":12}');
