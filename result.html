@@ -163,10 +163,9 @@ function renderDist(votes) {
   const coldPct = Math.round((votes[1]+votes[2])/total*100);
   const hotPct  = Math.round((votes[5]+votes[4])/total*100);
   const okPct   = Math.round(votes[3]/total*100);
-  let msg = `😊 回答者の <strong>${okPct}%</strong> がちょうどよいと感じています。`;
-  if (coldPct >= 20) msg += `　🥶 <strong>${coldPct}%</strong> がやや寒い〜とても寒いと回答。`;
-  if (hotPct  >= 20) msg += `　🥵 <strong>${hotPct}%</strong> がやや暑い〜とても暑いと回答。`;
-  document.getElementById('highlight').innerHTML = msg;
+  let msg = `回答者の <strong>${okPct}%</strong> がちょうどよいと感じています。`;
+  if (coldPct >= 20) msg += `　<strong>${coldPct}%</strong> がやや寒い〜とても寒いと回答。`;
+  if (hotPct  >= 20) msg += `　<strong>${hotPct}%</strong> がやや暑い〜とても暑いと回答。`;
 }
 
 const votes = JSON.parse(localStorage.getItem('votes') || '{"5":8,"4":19,"3":58,"2":31,"1":12}');
@@ -207,8 +206,8 @@ fetch('./data.json')
         responsive:true, maintainAspectRatio:false,
         plugins:{ legend:{ display:false } },
         scales:{
-          y:  { min:18, max:34, title:{display:true,text:'°C',font:{size:11}}, grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:11}} },
-          y2: { position:'right', min:35, max:80, title:{display:true,text:'%',font:{size:11}}, grid:{display:false}, ticks:{font:{size:11}} },
+          y:  { min:16, max:32, title:{display:true,text:'温度(°C)',font:{size:11}}, grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:11}} },
+          y2: { position:'right', min:35, max:75, title:{display:true,text:'湿度(%)',font:{size:11}}, grid:{display:false}, ticks:{font:{size:11}} },
           x:  { ticks:{font:{size:11}, autoSkip:false, maxRotation:0} }
         }
       }
