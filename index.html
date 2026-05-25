@@ -60,15 +60,6 @@
   .btn:disabled { opacity: 0.3; cursor: default; }
   .btn:not(:disabled):hover { opacity: 0.88; }
   .btn:not(:disabled):active { transform: scale(0.98); }
-  .sensor-strip {
-    display: flex; gap: 8px; margin-bottom: 24px;
-  }
-  .sensor-chip {
-    flex: 1; background: #f5f4f0; border-radius: 10px;
-    padding: 10px 8px; text-align: center;
-  }
-  .sensor-chip .val { font-size: 18px; font-weight: 700; color: #1a1a1a; }
-  .sensor-chip .lbl { font-size: 11px; color: #999; margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -76,22 +67,6 @@
   <div class="badge">🌡 快適環境アンケート</div>
   <h1>今、どのくらい感じますか？</h1>
   <p class="sub">現在の室内環境について教えてください。</p>
-
-  <!-- 現在の温湿度（data.json から読み込む） -->
-  <div class="sensor-strip">
-    <div class="sensor-chip">
-      <div class="val" id="s-temp">--</div>
-      <div class="lbl">室温 (°C)</div>
-    </div>
-    <div class="sensor-chip">
-      <div class="val" id="s-hum">--</div>
-      <div class="lbl">湿度 (%)</div>
-    </div>
-    <div class="sensor-chip">
-      <div class="val" id="s-di">--</div>
-      <div class="lbl">不快指数</div>
-    </div>
-  </div>
 
   <div class="options" id="options">
     <div class="opt" data-v="5" onclick="select(5)">
@@ -122,19 +97,6 @@
 <script>
   let chosen = null;
 
-  // ── data.json を読んで温湿度を表示 ──────────────────
-  fetch('./data.json')
-    .then(r => r.json())
-    .then(d => {
-      document.getElementById('s-temp').textContent = d.temperature;
-      document.getElementById('s-hum').textContent  = d.humidity;
-      document.getElementById('s-di').textContent   = d.discomfort_index;
-    })
-    .catch(() => {
-      // 読み込めなかった場合は "--" のまま
-    });
-
-  // ── 選択処理 ─────────────────────────────────────
   function select(v) {
     chosen = v;
     document.querySelectorAll('.opt').forEach(el => {
@@ -143,17 +105,12 @@
     document.getElementById('btn').disabled = false;
   }
 
-  // ── 回答送信：result.html へ遷移 ──────────────────
   function submit() {
     if (!chosen) return;
-
-    // 回答をローカルストレージに保存（result.html で読む）
     const votes = JSON.parse(localStorage.getItem('votes') || '{"5":8,"4":19,"3":58,"2":31,"1":12}');
     votes[chosen] = (votes[chosen] || 0) + 1;
     localStorage.setItem('votes', JSON.stringify(votes));
     localStorage.setItem('myAnswer', chosen);
-
-    // フィードバックページへ移動
     window.location.href = './result.html';
   }
 </script>
