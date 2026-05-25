@@ -1,0 +1,17 @@
+{
+  "temperature": 26.3,
+  "humidity": 58,
+  "discomfort_index": 75,
+  "updated_at": "2026-05-25T14:00:00+09:00",
+  "history": [
+    { "time": "09:00", "temp": 24.2, "hum": 55 },
+    { "time": "10:00", "temp": 24.8, "hum": 56 },
+    { "time": "11:00", "temp": 25.5, "hum": 57 },
+    { "time": "12:00", "temp": 26.3, "hum": 58 },
+    { "time": "13:00", "temp": 26.8, "hum": 60 },
+    { "time": "14:00", "temp": 27.1, "hum": 61 },
+    { "time": "15:00", "temp": 26.9, "hum": 60 },
+    { "time": "16:00", "temp": 26.5, "hum": 59 },
+    { "time": "17:00", "temp": 26.2, "hum": 58 }
+  ]
+}
