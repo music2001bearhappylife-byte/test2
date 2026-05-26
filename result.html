@@ -39,7 +39,7 @@
   .my-answer {
     display: flex; align-items: center; gap: 14px;
     background: #f0f4ff; border-radius: 14px;
-    padding: 14px 18px; margin-bottom: 20px;
+    padding: 14px 18px; margin-bottom: 16px;
   }
   .my-icon { font-size: 30px; }
   .my-label { font-size: 12px; color: #6680cc; margin-bottom: 2px; }
@@ -51,7 +51,13 @@
   .metric .lbl { font-size: 11px; color: #aaa; margin-bottom: 4px; }
   .badge-ok   { display:inline-block; font-size:11px; padding:2px 8px; border-radius:6px; margin-top:4px; background:#e6f4e6; color:#2e7d32; }
   .badge-warn { display:inline-block; font-size:11px; padding:2px 8px; border-radius:6px; margin-top:4px; background:#fff3e0; color:#e65100; }
-  .comfort-row { display:flex; gap:16px; flex-wrap:wrap; background:#f5f4f0; border-radius:12px; padding:12px 14px; margin-bottom:20px; font-size:13px; color:#555; }
+  .comfort-row { display:flex; gap:16px; flex-wrap:wrap; background:#f5f4f0; border-radius:12px; padding:12px 14px; margin-bottom:16px; font-size:13px; color:#555; }
+  .energy-box {
+    background: #f0faf0; border-radius: 12px; padding: 14px 16px;
+    margin-bottom: 20px; font-size: 13px; color: #2e5e2e; line-height: 1.8;
+    border-left: 4px solid #4caf50;
+  }
+  .energy-box .energy-title { font-weight: 700; font-size: 13px; margin-bottom: 6px; color: #1b5e20; }
   .section-label { font-size:13px; font-weight:600; color:#888; margin-bottom:10px; }
   .dist-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
   .dist-icon { font-size:16px; width:22px; text-align:center; flex-shrink:0; }
@@ -59,7 +65,6 @@
   .bar-bg { flex:1; background:#f0f0f0; border-radius:4px; height:10px; overflow:hidden; }
   .bar-fill { height:100%; border-radius:4px; transition: width 0.6s ease; }
   .dist-pct { font-size:13px; font-weight:600; width:34px; text-align:right; color:#333; flex-shrink:0; }
-  .highlight { background:#f0f4ff; border-radius:12px; padding:12px 16px; margin-bottom:20px; font-size:14px; color:#1f3d9e; line-height:1.7; }
   .chart-wrap { position:relative; width:100%; height:200px; margin-bottom:8px; }
   .legend { display:flex; gap:16px; font-size:12px; color:#888; margin-bottom:20px; }
   .legend-dot { width:10px; height:10px; border-radius:2px; display:inline-block; margin-right:4px; }
@@ -77,6 +82,7 @@
   <h1>現在の室内環境</h1>
   <p class="updated" id="updated-at">取得中…<span class="demo-tag">デモ</span></p>
 
+  <!-- あなたの回答 -->
   <div class="my-answer">
     <div class="my-icon" id="my-icon">😊</div>
     <div>
@@ -85,6 +91,11 @@
     </div>
   </div>
 
+  <!-- みんなの感じ方（あなたの回答の直下） -->
+  <div class="section-label">みんなの感じ方（<span id="total-count">--</span>件中）</div>
+  <div id="dist-bars" style="margin-bottom:20px;"></div>
+
+  <!-- 温湿度メトリクス -->
   <div class="metrics">
     <div class="metric">
       <div class="lbl">室温</div>
@@ -103,26 +114,33 @@
     </div>
   </div>
 
+  <!-- 快適域 -->
   <div class="comfort-row">
-    <span>🌡 快適域：<strong>22〜28°C</strong></span>
-    <span>💧 快適域：<strong>40〜65%</strong></span>
+    <span>🌡 快適域：<strong>24〜27°C</strong></span>
+    <span>💧 快適域：<strong>45〜60%</strong></span>
   </div>
 
-  <div class="section-label">みんなの感じ方（<span id="total-count">--</span>件）</div>
-  <div id="dist-bars"></div>
+  <!-- 省エネ情報 -->
+  <div class="energy-box">
+    <div class="energy-title">💡 空調の省エネ豆知識</div>
+    冷房の設定温度を <strong>1°C 上げる</strong>と、空調の消費電力を約 <strong>10%</strong> 削減できます。<br>
+    一般家庭（6畳エアコン）で夏の1か月あたり約 <strong>300〜500円</strong> の節約に相当します。<br>
+    <span style="font-size:11px; color:#4a7a4a;">※ 出典：省エネルギーセンター・空調機器の省エネ基準（冷房負荷10%/1℃の目安）</span>
+  </div>
 
-  <div class="highlight" id="highlight"></div>
-
+  <!-- グラフ凡例 -->
   <div class="legend">
     <span><span class="legend-dot" style="background:#D85A30"></span>室温 (°C・左軸)</span>
     <span><span class="legend-dot" style="background:#378ADD; border:1px dashed #378ADD"></span>湿度 (% ・右軸)</span>
   </div>
 
+  <!-- 推移グラフ -->
   <div class="chart-wrap">
     <canvas id="chart" role="img" aria-label="本日の室温と湿度の時間推移">本日の室温・湿度推移データ</canvas>
   </div>
 </div>
 
+<!-- QR -->
 <div class="card">
   <div class="section-label" style="text-align:center">このアンケートをシェア</div>
   <div class="qr-box">
@@ -148,7 +166,7 @@ document.getElementById('my-val').textContent  = myOpt.label;
 
 function renderDist(votes) {
   const total = Object.values(votes).reduce((a,b)=>a+b,0);
-  document.getElementById('total-count').textContent = total + '件';
+  document.getElementById('total-count').textContent = total;
   const container = document.getElementById('dist-bars');
   container.innerHTML = OPTS.map(o => {
     const pct = total > 0 ? Math.round(votes[o.v] / total * 100) : 0;
@@ -159,14 +177,6 @@ function renderDist(votes) {
       <div class="dist-pct">${pct}%</div>
     </div>`;
   }).join('');
-
-  const coldPct = Math.round((votes[1]+votes[2])/total*100);
-  const hotPct  = Math.round((votes[5]+votes[4])/total*100);
-  const okPct   = Math.round(votes[3]/total*100);
-  let msg = `回答者の <strong>${okPct}%</strong> がちょうどよいと感じています。`;
-  if (coldPct >= 20) msg += `　<strong>${coldPct}%</strong> がやや寒い〜とても寒いと回答。`;
-  if (hotPct  >= 20) msg += `　<strong>${hotPct}%</strong> がやや暑い〜とても暑いと回答。`;
-  document.getElementById('highlight').innerHTML = msg;
 }
 
 const votes = JSON.parse(localStorage.getItem('votes') || '{"5":8,"4":19,"3":58,"2":31,"1":12}');
@@ -179,8 +189,8 @@ fetch('./data.json')
     document.getElementById('m-hum').innerHTML  = d.humidity    + '<span style="font-size:12px;color:#aaa">%</span>';
     document.getElementById('m-set').innerHTML  = d.set_temperature + '<span style="font-size:12px;color:#aaa">°C</span>';
 
-    const tempOk = d.temperature    >= 24 && d.temperature    <= 27;
-    const humOk  = d.humidity       >= 45 && d.humidity       <= 60;
+    const tempOk = d.temperature     >= 24 && d.temperature     <= 27;
+    const humOk  = d.humidity        >= 45 && d.humidity        <= 60;
     const setOk  = d.set_temperature >= 24 && d.set_temperature <= 28;
     const b = (ok, okTxt, ngTxt) => `<span class="${ok?'badge-ok':'badge-warn'}">${ok?okTxt:ngTxt}</span>`;
     document.getElementById('b-temp').outerHTML = b(tempOk, '快適域内', '範囲外');
